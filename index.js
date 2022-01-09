@@ -16,8 +16,8 @@ let windowWidth, windowHeight;
 let panning = false;
 let minScale = null, scale = 1;
 
-const maxScale = 2;
-const zoomIncrement = 0.02;
+const maxScale = 3;
+const zoomIncrement = 0.04;
 
 const init = () => {
   getElements();
@@ -25,7 +25,7 @@ const init = () => {
 
   // Initialize event listeners
   albums.addEventListener("input", selectAlbum);
-  document.addEventListener("keyup", handleShortcuts, false);
+  document.addEventListener("keydown", handleShortcuts, false);
   detailsForm.addEventListener("submit", handleSubmit);
   image.onload = imageLoaded;
   window.onresize = windowResized;
@@ -34,7 +34,12 @@ const init = () => {
   overlay.onmouseup = panStop;
   overlay.onwheel = zoom;
 
-  loadImage(localStorage.getItem("lastSeen") || "https://www.thesprucepets.com/thmb/Eh-n-bxfKQTopLQZ9gTiOChF-jY=/1080x810/smart/filters:no_upscale()/16_Love-5bb4c12bc9e77c00263933b3.jpg");
+  const lastSeen = localStorage.getItem("lastSeen");
+  if (lastSeen === null || lastSeen === "undefined")
+    loadImage("https://www.thesprucepets.com/thmb/Eh-n-bxfKQTopLQZ9gTiOChF-jY=/1080x810/smart/filters:no_upscale()/16_Love-5bb4c12bc9e77c00263933b3.jpg");
+  else
+    selectAlbum({ target: { value: localStorage.getItem("selected") } });
+    loadImage(lastSeen);
 };
 
 const addImages = () => {
@@ -53,6 +58,7 @@ const clearData = () => {
   if (confirm("Are you sure you want to clear all data?")) {
     localStorage.clear();
     alert("Data cleared");
+    location.reload();
   }
 };
 
@@ -179,11 +185,11 @@ const handleShortcuts = e => {
   } else {
     switch (e.key) {
       case "d":
-      case e.left:
+      case "ArrowLeft":
         nextImage()
         break;
       case "a":
-      case e.right:
+      case "ArrowRight":
         prevImage()
         break;
     }
@@ -324,6 +330,8 @@ const updateImageList = () => {
       imageListElt.appendChild(createListElement(url, true));
     });
   }
+
+  loadImage(imageList[imageIndex || 0]);
 };
 
 const windowResized = () => {
