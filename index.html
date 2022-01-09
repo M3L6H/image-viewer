@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IS Viewer</title>
+
+  <link rel="stylesheet" href="styles.css">
+  <script src="index.js"></script>
+</head>
+<body onload="init()">
+  <div id="viewer">
+    <img
+      id="image"
+      alt="image"
+    >
+  </div>
+  <div id="overlay"></div>
+  <div id="modal-overlay" class="hidden" onclick="hideModal()">
+  </div>
+  <div id="modal" class="hidden">
+    <div class="flex-container">
+      <h3 class="title">Manage Albums</h3>
+      <form id="details">
+        <label for="albums">Albums</label>
+        <div>
+          <select name="albums" id="albums">
+            <option selected disabled value="0">Select One</option>
+          </select>
+          <button onclick="createAlbum()">+</button>
+        </div>
+        <label for="images">Images</label>
+        <textarea name="images" id="images" rows="10" disabled></textarea>
+        <div class="align-right"><button onclick="addImages()">Add Images</button></div>
+        <label>Image List</label>
+        <div class="scroll-y border">
+          <ul id="image-list">
+            <li>No images</li>
+          </ul>
+        </div>
+      </form>
+    </div>
+  </div>
+</body>
+</html>
