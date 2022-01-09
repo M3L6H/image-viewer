@@ -33,12 +33,11 @@ const init = () => {
   overlay.onmouseup = panStop;
   overlay.onwheel = zoom;
 
-  const lastSeen = localStorage.getItem("lastSeen");
+  const lastSeen = localStorage.getItem("selected");
   if (!lastSeen || lastSeen == "null" || lastSeen == "undefined") {
     loadImage("https://www.thesprucepets.com/thmb/Eh-n-bxfKQTopLQZ9gTiOChF-jY=/1080x810/smart/filters:no_upscale()/16_Love-5bb4c12bc9e77c00263933b3.jpg");
   } else {
-    selectAlbum({ target: { value: localStorage.getItem("selected") } });
-    loadImage(lastSeen);
+    selectAlbum({ target: { value: lastSeen } });
   }
 };
 
@@ -205,26 +204,27 @@ const hideModal = () => {
   modalOverlay.classList.add("hidden");
 };
 
-const imageLoaded = () => {
+const imageLoaded = (newImage) => {
+  image.replaceWith(newImage);
+  image = newImage;
+  minScale = null;
   getImageDimensions();
   resizeImage();
 };
 
 const loadImage = src => {
-  minScale = null;
   const newImage = document.createElement("img");
   newImage.src = src;
   newImage.id = "image";
-  image.replaceWith(newImage);
-  image = newImage;
-  image.onload = imageLoaded;
-  localStorage.setItem("lastSeen", src);
+  newImage.onload = () => imageLoaded(newImage);
 };
+
+const mod = (n, m) => ((n % m) + m) % m;
 
 const nextImage = (dir) => {
   dir ||= 1;
 
-  imageIndex = clamp(imageIndex + dir, 0, imageList.length);
+  imageIndex = mod(imageIndex + dir, imageList.length);
   saveAlbum();
   loadImage(imageList[imageIndex]);
 }
@@ -341,6 +341,7 @@ const updateImageList = () => {
 
 const windowResized = () => {
   getWindowDimensions();
+  minScale = null;
   resizeImage();
 };
 
