@@ -33,6 +33,8 @@ const init = () => {
   overlay.onmousemove = pan;
   overlay.onmouseup = panStop;
   overlay.onwheel = zoom;
+
+  loadImage(localStorage.getItem("lastSeen") || "https://www.thesprucepets.com/thmb/Eh-n-bxfKQTopLQZ9gTiOChF-jY=/1080x810/smart/filters:no_upscale()/16_Love-5bb4c12bc9e77c00263933b3.jpg");
 };
 
 const addImages = () => {
@@ -174,6 +176,17 @@ const handleShortcuts = e => {
         openModal();
         break;
     }
+  } else {
+    switch (e.key) {
+      case "d":
+      case e.left:
+        nextImage()
+        break;
+      case "a":
+      case e.right:
+        prevImage()
+        break;
+    }
   }
 };
 
@@ -194,7 +207,16 @@ const imageLoaded = () => {
 const loadImage = src => {
   minScale = null;
   image.src = src;
+  localStorage.setItem("lastSeen", src);
 };
+
+const nextImage = (dir) => {
+  dir ||= 1;
+
+  imageIndex = clamp(imageIndex + dir, 0, imageList.length);
+  saveAlbum();
+  loadImage(imageList[imageIndex]);
+}
 
 const openModal = () => {
   modal.classList.remove("hidden");
@@ -230,6 +252,8 @@ const pan = e => {
 const panStop = () => {
   panning = false;
 };
+
+const prevImage = () => nextImage(-1);
 
 const resizeImage = () => {
   if (minScale === null) {
