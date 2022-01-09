@@ -27,7 +27,6 @@ const init = () => {
   albums.addEventListener("input", selectAlbum);
   document.addEventListener("keydown", handleShortcuts, false);
   detailsForm.addEventListener("submit", handleSubmit);
-  image.onload = imageLoaded;
   window.onresize = windowResized;
   overlay.onmousedown = panStart;
   overlay.onmousemove = pan;
@@ -35,11 +34,12 @@ const init = () => {
   overlay.onwheel = zoom;
 
   const lastSeen = localStorage.getItem("lastSeen");
-  if (lastSeen === null || lastSeen === "undefined")
+  if (!lastSeen || lastSeen == "null" || lastSeen == "undefined") {
     loadImage("https://www.thesprucepets.com/thmb/Eh-n-bxfKQTopLQZ9gTiOChF-jY=/1080x810/smart/filters:no_upscale()/16_Love-5bb4c12bc9e77c00263933b3.jpg");
-  else
+  } else {
     selectAlbum({ target: { value: localStorage.getItem("selected") } });
     loadImage(lastSeen);
+  }
 };
 
 const addImages = () => {
@@ -212,7 +212,12 @@ const imageLoaded = () => {
 
 const loadImage = src => {
   minScale = null;
-  image.src = src;
+  const newImage = document.createElement("img");
+  newImage.src = src;
+  newImage.id = "image";
+  image.replaceWith(newImage);
+  image = newImage;
+  image.onload = imageLoaded;
   localStorage.setItem("lastSeen", src);
 };
 
