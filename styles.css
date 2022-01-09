@@ -1,4 +1,4 @@
-body, #viewer {
+body {
   height: 100vh;
   width: 100vw;
   padding: 0;
@@ -17,6 +17,11 @@ h3, ul, li {
 
 #viewer {
   overflow: scroll;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  max-height: 100vh;
+  max-width: 100vw;
 }
 
 #viewer::-webkit-scrollbar {
