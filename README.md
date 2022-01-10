@@ -7,7 +7,7 @@ around the web.
 
 ## Controls
 
-Use `ctrl-m` to bring up the image-management window.
+Use `ctrl+m` to bring up the image-management window.
 
 In it, create an album and start adding images. It's as simple as that.
 
@@ -15,7 +15,9 @@ Use the `arrowkeys` to navigate back and forth between images.
 
 Use the `mousewheel` to zoom in and out and `click-and-drag` to pan.
 
-If you want to clear all your data, use `ctrl-c`.
+If you want to clear all your data, use `ctrl+c`.
 
 When viewing a video, press and hold `` ` `` to enable the mouse to interact
 with the video window.
+
+With an album selected, use `shift+a` to quick add an image or video.
