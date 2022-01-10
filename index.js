@@ -271,12 +271,12 @@ const loadMedia = src => {
     // Image
     case /.*\.(jpg|png|gif)$/i.test(src):
       newMedia = document.createElement("img");
-      newMedia.src = src;
       newMedia.onload = () => imageLoaded(newMedia);
       break;
     case /.*y.*tu.*be.*\/watch\?v=.+$/i.test(src):
+      src = src.replace(/watch\?v=/, "embed/");
+    case /.*\/embed\/.*/.test(src):
       newMedia = document.createElement("iframe");
-      newMedia.src = src.replace(/watch\?v=/, "embed/");
       newMedia.allow = allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
       newMedia.allowFullscreen = true;
       newMedia.style.visibility = "hidden";
@@ -288,7 +288,6 @@ const loadMedia = src => {
       break;
     default:
       newMedia = document.createElement("iframe");
-      newMedia.src = src;
       newMedia.allowFullscreen = true;
       newMedia.style.visibility = "hidden";
       newMedia.style.width = "100vw";
@@ -299,6 +298,7 @@ const loadMedia = src => {
   }
 
   newMedia.id = "image";
+  newMedia.src = src;
   loader.classList.remove("hidden");
 };
 
