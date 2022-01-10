@@ -143,6 +143,6 @@ li {
   margin-top: 8px;
 }
 
-button {
+button, iframe {
   cursor: pointer;
 }

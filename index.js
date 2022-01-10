@@ -3,6 +3,7 @@ let detailsForm = "details";
 let image = "image";
 let imageListElt = "image-list";
 let images = "images";
+let loader = "loader";
 let modal = "modal";
 let modalOverlay = "modal-overlay";
 let overlay = "overlay";
@@ -25,17 +26,19 @@ const init = () => {
 
   // Initialize event listeners
   albums.addEventListener("input", selectAlbum);
-  document.addEventListener("keydown", handleShortcuts, false);
   detailsForm.addEventListener("submit", handleSubmit);
-  window.onresize = windowResized;
+  document.addEventListener("keydown", handleShortcuts, false);
+  document.addEventListener("keyup", handleKeyUp, false);
   overlay.onmousedown = panStart;
   overlay.onmousemove = pan;
   overlay.onmouseup = panStop;
   overlay.onwheel = zoom;
+  window.onresize = windowResized;
+  window.addEventListener("blur", unhideOverlay);
 
   const lastSeen = localStorage.getItem("selected");
   if (!lastSeen || lastSeen == "null" || lastSeen == "undefined") {
-    loadImage("https://www.thesprucepets.com/thmb/Eh-n-bxfKQTopLQZ9gTiOChF-jY=/1080x810/smart/filters:no_upscale()/16_Love-5bb4c12bc9e77c00263933b3.jpg");
+    loadMedia("https://www.thesprucepets.com/thmb/Eh-n-bxfKQTopLQZ9gTiOChF-jY=/1080x810/smart/filters:no_upscale()/16_Love-5bb4c12bc9e77c00263933b3.jpg");
   } else {
     selectAlbum({ target: { value: lastSeen } });
   }
@@ -152,6 +155,7 @@ const getElements = () => {
   image = document.getElementById(image);
   imageListElt = document.getElementById(imageListElt);
   images = document.getElementById(images);
+  loader = document.getElementById(loader);
   modal = document.getElementById(modal);
   modalOverlay = document.getElementById(modalOverlay);
   overlay = document.getElementById(overlay);
@@ -186,6 +190,14 @@ const getWindowDimensions = () => {
   windowWidth = getWidth();
 };
 
+const handleKeyUp = e => {
+  switch (e.key) {
+    case "v":
+      unhideOverlay();
+      break;
+  }
+}
+
 const handleShortcuts = e => {
   if (e.ctrlKey) {
     switch(e.key) {
@@ -216,6 +228,9 @@ const handleShortcuts = e => {
       case "ArrowRight":
         prevImage()
         break;
+      case "v":
+        overlay.style.display = "none";
+        break;
     }
   }
 };
@@ -230,6 +245,7 @@ const hideModal = () => {
 };
 
 const imageLoaded = (newImage) => {
+  loader.classList.add("hidden");
   image.replaceWith(newImage);
   image = newImage;
   minScale = null;
@@ -237,11 +253,53 @@ const imageLoaded = (newImage) => {
   resizeImage();
 };
 
-const loadImage = src => {
-  const newImage = document.createElement("img");
-  newImage.src = src;
-  newImage.id = "image";
-  newImage.onload = () => imageLoaded(newImage);
+const iframeLoaded = (iframe) => {
+  loader.classList.add("hidden");
+  iframe.onload = undefined;
+  iframe.style.visibility = "visible";
+  minScale = null;
+  getImageDimensions();
+  resizeImage();
+}
+
+const loadMedia = src => {
+  let newMedia;
+
+  if (!src) return;
+
+  switch (true) {
+    // Image
+    case /.*\.(jpg|png|gif)$/i.test(src):
+      newMedia = document.createElement("img");
+      newMedia.src = src;
+      newMedia.onload = () => imageLoaded(newMedia);
+      break;
+    case /.*y.*tu.*be.*\/watch\?v=.+$/i.test(src):
+      newMedia = document.createElement("iframe");
+      newMedia.src = src.replace(/watch\?v=/, "embed/");
+      newMedia.allow = allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
+      newMedia.allowFullscreen = true;
+      newMedia.style.visibility = "hidden";
+      newMedia.width = 1920;
+      newMedia.height = 1080;
+      image.replaceWith(newMedia);
+      image = newMedia;
+      newMedia.onload = () => iframeLoaded(newMedia);
+      break;
+    default:
+      newMedia = document.createElement("iframe");
+      newMedia.src = src;
+      newMedia.allowFullscreen = true;
+      newMedia.style.visibility = "hidden";
+      newMedia.style.width = "100vw";
+      newMedia.style.height = "100vh";
+      image.replaceWith(newMedia);
+      image = newMedia;
+      newMedia.onload = () => iframeLoaded(newMedia);
+  }
+
+  newMedia.id = "image";
+  loader.classList.remove("hidden");
 };
 
 const mod = (n, m) => ((n % m) + m) % m;
@@ -253,20 +311,13 @@ const nextImage = (dir) => {
 
   imageIndex = mod(imageIndex + dir, imageList.length);
   saveAlbum();
-  loadImage(imageList[imageIndex]);
+  loadMedia(imageList[imageIndex]);
 }
 
 const openModal = () => {
   modal.classList.remove("hidden");
   modalOverlay.classList.remove("hidden");
   updateAlbumsDropdown();
-
-  const selected = localStorage.getItem("selected");
-
-  if (selected) {
-    albums.value = selected;
-    selectAlbum({ target: { value: selected } });
-  }
 };
 
 const panStart = e => {
@@ -325,13 +376,20 @@ const selectAlbum = e => {
 
     if (imageList.length > 0) {
       imageIndex ||= 0;
-      loadImage(imageList[imageIndex]);
+      loadMedia(imageList[imageIndex]);
     }
   }
 };
 
 const setAlbums = albums => {
   localStorage.setItem("albums", albums.join(" "));
+};
+
+const unhideOverlay = () => {
+  setTimeout(() => {
+    overlay.style.display = "block";
+    overlay.focus();
+  }, 1);
 };
 
 const updateAlbumsDropdown = (selected) => {
@@ -363,7 +421,7 @@ const updateImageList = () => {
     });
   }
 
-  loadImage(imageList[imageIndex || 0]);
+  loadMedia(imageList[imageIndex || 0]);
 };
 
 const windowResized = () => {
