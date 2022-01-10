@@ -122,8 +122,12 @@ const deleteAlbum = () => {
 
 const deleteImage = (url) => {
   const index = imageList.indexOf(url);
-  if (index < imageIndex) imageIndex--;
   imageList.splice(index, 1);
+  if (index <= imageIndex) {
+    let shouldLoad = index === imageIndex;
+    imageIndex = clamp(imageIndex - 1, 0, imageList.length);
+    if (shouldLoad) loadMedia(imageList[imageIndex]);
+  }
   saveAlbum();
   updateImageList();
 };
@@ -265,14 +269,18 @@ const iframeLoaded = (iframe) => {
 const loadMedia = src => {
   let newMedia;
 
-  if (!src) return;
+  if (!src) {
+    image.src = null;
+    return;
+  }
 
   switch (true) {
     // Image
-    case /.*\.(jpg|png|gif)$/i.test(src):
+    case /.*\.(jpe?g|png|gif)(\?.*)?$/i.test(src):
       newMedia = document.createElement("img");
       newMedia.onload = () => imageLoaded(newMedia);
       break;
+    // Video
     case /.*y.*tu.*be.*\/watch\?v=.+$/i.test(src):
       src = src.replace(/watch\?v=/, "embed/");
     case /.*\/embed\/.*/.test(src):
@@ -286,6 +294,7 @@ const loadMedia = src => {
       image = newMedia;
       newMedia.onload = () => iframeLoaded(newMedia);
       break;
+    // Unrecognized format
     default:
       newMedia = document.createElement("iframe");
       newMedia.allowFullscreen = true;
