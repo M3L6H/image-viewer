@@ -196,7 +196,7 @@ const getWindowDimensions = () => {
 
 const handleKeyUp = e => {
   switch (e.key) {
-    case "v":
+    case "`":
       unhideOverlay();
       break;
   }
@@ -232,7 +232,7 @@ const handleShortcuts = e => {
       case "ArrowRight":
         prevImage()
         break;
-      case "v":
+      case "`":
         overlay.style.display = "none";
         break;
     }
