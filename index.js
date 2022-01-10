@@ -318,6 +318,10 @@ const openModal = () => {
   modal.classList.remove("hidden");
   modalOverlay.classList.remove("hidden");
   updateAlbumsDropdown();
+
+  const selected = localStorage.getItem("selected");
+
+  if (selected) albums.value = selected;
 };
 
 const panStart = e => {
