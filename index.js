@@ -170,6 +170,12 @@ const getWindowDimensions = () => {
 const handleShortcuts = e => {
   if (e.ctrlKey) {
     switch(e.key) {
+      case "1":
+        e.preventDefault()
+        e.stopPropagation();
+        minScale = null;
+        resizeImage();
+        break;
       case "c":
         e.preventDefault();
         e.stopPropagation();
