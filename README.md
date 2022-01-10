@@ -3,6 +3,8 @@
 A simple image viewer that lets you collect and organize image links from
 around the web.
 
+[Link to the viewer here](https://m3l6h.github.io/image-viewer/)
+
 ## Controls
 
 Use `ctrl-m` to bring up the image-management window.
