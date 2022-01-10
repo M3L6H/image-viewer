@@ -17,5 +17,5 @@ Use the `mousewheel` to zoom in and out and `click-and-drag` to pan.
 
 If you want to clear all your data, use `ctrl-c`.
 
-When viewing a video, press and hold `v` to enable the mouse to interact with
-the video window.
+When viewing a video, press and hold `` ` `` to enable the mouse to interact
+with the video window.
