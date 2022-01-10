@@ -44,8 +44,23 @@ const init = () => {
   }
 };
 
-const addImages = () => {
-  const imageLinks = images.value.split(/\s+/);
+const addImage = () => {
+  if (!album) {
+    alert("Cannot quickadd when no album is selected!");
+    return;
+  }
+
+  const image = prompt("Enter the url for the image");
+
+  if (image) {
+    imageIndex = imageList.indexOf(image);
+    addImages([image]);
+    loadMedia(image);
+  }
+};
+
+const addImages = (imageLinks) => {
+  imageLinks ||= images.value.split(/\s+/);
   imageList = [...new Set(imageList.concat(imageLinks))];
   saveAlbum();
   updateImageList();
@@ -220,6 +235,14 @@ const handleShortcuts = e => {
         e.preventDefault();
         e.stopPropagation();
         openModal();
+        break;
+    }
+  } else if (e.shiftKey) {
+    switch (e.key) {
+      case "A":
+        e.preventDefault();
+        e.stopPropagation();
+        addImage();
         break;
     }
   } else {
