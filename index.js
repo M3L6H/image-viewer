@@ -68,6 +68,7 @@ const createAlbum = () => {
     const albums = getAlbums();
     albums.push(album);
     setAlbums(albums);
+    localStorage.setItem(`${album}.index`, 0);
     updateAlbumsDropdown(album);
     selectAlbum({ target: { value: album } });
   }
@@ -96,6 +97,24 @@ const createOption = (text, value) => {
   option.innerText = text;
   option.value = (value !== undefined) ? value : text.replace(" ", "_");
   return option;
+};
+
+const deleteAlbum = () => {
+  if (!confirm(`Are you sure you want to delete '${album}'?`)) return;
+
+  const albums = getAlbums();
+  albums.splice(albums.indexOf(album), 1);
+  setAlbums(albums);
+  localStorage.removeItem(`${album}.images`);
+  localStorage.removeItem(`${album}.index`);
+
+  if (albums.length > 0)
+    localStorage.setItem("selected", albums[0]);
+  else
+    localStorage.removeItem("selected");
+
+  alert(`'${album}' deleted`);
+  location.reload();
 };
 
 const deleteImage = (url) => {
@@ -229,6 +248,8 @@ const mod = (n, m) => ((n % m) + m) % m;
 
 const nextImage = (dir) => {
   dir ||= 1;
+
+  if (imageIndex === null || imageIndex === undefined) return;
 
   imageIndex = mod(imageIndex + dir, imageList.length);
   saveAlbum();

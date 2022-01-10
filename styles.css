@@ -132,3 +132,17 @@ li {
   transform: translate(-50%, -50%);
   z-index: 2;
 }
+
+.warning {
+  color: red;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+.mt {
+  margin-top: 8px;
+}
+
+button {
+  cursor: pointer;
+}
