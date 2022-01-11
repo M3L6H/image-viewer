@@ -356,6 +356,11 @@ a:hover {
   filter: drop-shadow(.075em .075em white);
 }
 
+.fade {
+  transition: opacity 0.5s ease;
+  opacity: 0;
+}
+
 .vertical-center {
   display: flex;
   align-items: center;

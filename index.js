@@ -24,6 +24,7 @@ let scrollX, scrollY;
 let windowWidth, windowHeight;
 let panning = false;
 let minScale = null, scale = 1;
+let imageIndexTimeout;
 
 // Constants
 // Maximum scale we allow (3x the original size)
@@ -707,7 +708,11 @@ const updateImageDisplay = () => {
 
 // Helper function to update the image index
 const updateImageIndexElt = () => {
+  if (!imageList) return;
+  if (imageIndexTimeout) clearTimeout(imageIndexTimeout);
+  imageIndexElt.classList.remove("fade");
   imageIndexElt.innerText = `${imageIndex + 1}/${imageList.length}`;
+  imageIndexTimeout = setTimeout(() => imageIndexElt.classList.add("fade"), 3000);
 };
 
 // Called to update the list of images in the album managment modal
