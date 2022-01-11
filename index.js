@@ -491,8 +491,6 @@ const windowResized = () => {
 };
 
 const zoom = e => {
-  console.log(e, image.getBoundingClientRect());
-
   const bb = image.getBoundingClientRect();
   const mX = (e.clientX - bb.x) / scale, mY = (e.clientY - bb.y) / scale;
 
