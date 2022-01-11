@@ -495,9 +495,10 @@ const zoom = e => {
   const mX = (e.clientX - bb.x) / scale, mY = (e.clientY - bb.y) / scale;
 
   const direction = clamp(e.deltaY, -1, 1) * -1;
-  const scaleChange = direction * zoomIncrement;
-  scale += scaleChange;
+  const oldScale = scale;
+  scale += direction * zoomIncrement;
   scale = clamp(scale, minScale, maxScale);
+  const scaleChange = scale - oldScale;
 
   const dX = (mX * scaleChange), dY = (mY * scaleChange);
 
