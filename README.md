@@ -23,3 +23,7 @@ with the video window.
 With an album selected, use `shift+a` to quick add an image or video.
 
 Press `/` to toggle in-viewer help instructions.
+
+# Credits
+
+Default image is taken from [Unsplash by Alvan Nee](https://unsplash.com/photos/ZCHj_2lJP00).
