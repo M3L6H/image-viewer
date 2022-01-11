@@ -491,20 +491,20 @@ const windowResized = () => {
 };
 
 const zoom = e => {
+  const bb = image.getBoundingClientRect();
+  const mX = (e.clientX - bb.x) / scale, mY = (e.clientY - bb.y) / scale;
+
   const direction = clamp(e.deltaY, -1, 1) * -1;
+  const oldScale = scale;
   scale += direction * zoomIncrement;
   scale = clamp(scale, minScale, maxScale);
+  const scaleChange = scale - oldScale;
 
-  const oldWidth = image.width, oldHeight = image.height;
+  const dX = (mX * scaleChange), dY = (mY * scaleChange);
 
   image.width = scale * imgWidth;
   image.height = image.width / aspectRatio;
 
-  const deltaX = image.width - oldWidth, deltaY = image.height - oldHeight;
-
-  mouseX = e.clientX;
-  mouseY = e.clientY;
-
-  viewer.scrollLeft += deltaX * (mouseX / windowWidth);
-  viewer.scrollTop += deltaY * (mouseY / windowHeight);
+  viewer.scrollLeft += dX;
+  viewer.scrollTop += dY;
 };
