@@ -21,3 +21,5 @@ When viewing a video, press and hold `` ` `` to enable the mouse to interact
 with the video window.
 
 With an album selected, use `shift+a` to quick add an image or video.
+
+Press `/` to toggle in-viewer help instructions.

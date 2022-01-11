@@ -1,6 +1,8 @@
 let albums = "albums";
 let albumTitle = "album-title";
 let detailsForm = "details";
+let help = "help";
+let helpOverlay = "help-overlay";
 let image = "image";
 let imageIndexElt = "image-index";
 let imageListElt = "image-list";
@@ -183,6 +185,8 @@ const getElements = () => {
   albums = document.getElementById(albums);
   albumTitle = document.getElementById(albumTitle);
   detailsForm = document.getElementById(detailsForm);
+  help = document.getElementById(help);
+  helpOverlay = document.getElementById(helpOverlay);
   image = document.getElementById(image);
   imageIndexElt = document.getElementById(imageIndexElt);
   imageListElt = document.getElementById(imageListElt);
@@ -273,12 +277,23 @@ const handleShortcuts = e => {
       case "`":
         overlay.style["pointer-events"] = "none";
         break;
+      case "/":
+        if (help.classList.contains("hidden"))
+          showHelp();
+        else
+          hideHelp();
+        break;
     }
   }
 };
 
 const handleSubmit = e => {
   e.preventDefault();
+};
+
+const hideHelp = () => {
+  help.classList.add("hidden");
+  helpOverlay.classList.add("hidden");
 };
 
 const hideModal = () => {
@@ -436,6 +451,11 @@ const selectAlbum = e => {
 
 const setAlbums = albums => {
   localStorage.setItem("albums", albums.join(" "));
+};
+
+const showHelp = () => {
+  help.classList.remove("hidden");
+  helpOverlay.classList.remove("hidden");
 };
 
 const unhideOverlay = () => {

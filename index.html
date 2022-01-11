@@ -21,8 +21,9 @@
     <h1 id="album-title"></h1>
     <span id="image-index"></span>
   </div>
-  <div id="modal-overlay" class="hidden" onclick="hideModal()">
-  </div>
+
+  <div id="modal-overlay" class="hidden" onclick="hideModal()"></div>
+
   <div id="modal" class="hidden">
     <div class="flex-container">
       <h3 class="title">Manage Albums</h3>
@@ -54,6 +55,46 @@
           </button>
         </div>
       </form>
+    </div>
+  </div>
+
+  <span class="help icon-btn" onclick="showHelp()"></span>
+
+  <div id="help-overlay" class="hidden" onclick="hideHelp()"></div>
+
+  <div id="help" class="hidden">
+    <div class="flex-container">
+      <h3 class="title">Help</h3>
+      <ul class="hotkey-list">
+        <li class="hotkey">
+          <code>CTRL+M</code>
+          <span>Show album management window</span>
+        </li>
+        <li class="hotkey">
+          <code>SHIFT+A</code>
+          <span>Quick-add to currently selected album</span>
+        </li>
+        <li class="hotkey">
+          <code>WD/arrowkeys</code>
+          <span>Navigate</span>
+        </li>
+        <li class="hotkey">
+          <code>mousewheel</code>
+          <span>Zoom</span>
+        </li>
+        <li class="hotkey">
+          <code>click-and-drag</code>
+          <span>Pan</span>
+        </li>
+        <li class="hotkey">
+          <code>`</code>
+          <span>Hold to interact with video or iframe</span>
+        </li>
+        <li class="hotkey">
+          <code>/</code>
+          <span>Show this help window</span>
+        </li>
+      </ul>
     </div>
   </div>
 </body>

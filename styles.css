@@ -48,7 +48,7 @@ h1, h2, h3, ul, li {
   margin: auto;
 }
 
-#modal-overlay {
+#modal-overlay, #help-overlay {
   position: absolute;
   top: 0;
   right: 0;
@@ -59,7 +59,11 @@ h1, h2, h3, ul, li {
   z-index: 10;
 }
 
-#modal {
+#help-overlay {
+  z-index: 31;
+}
+
+#modal, #help {
   position: absolute;
   top: calc(50% - 400px);
   left: calc(50% - 250px);
@@ -70,6 +74,56 @@ h1, h2, h3, ul, li {
   border-radius: 8px;
 
   z-index: 11;
+}
+
+#help {
+  z-index: 32;
+  top: calc(50% - 125px);
+  left: calc(50% - 175px);
+  width: 350px;
+  height: 250px;
+}
+
+.hotkey-list {
+  margin-top: 16px;
+  width: 100%;
+  overflow: hidden;
+}
+
+.hotkey {
+  margin-bottom: 8px;
+}
+
+.hotkey::before {
+  float: left;
+  width: 0;
+  white-space: nowrap;
+  content: "....................................................................................................................................";
+}
+
+.hotkey > span {
+  background: white;
+  float: right;
+  padding-left: 0.3em;
+}
+
+code {
+  font-family: monospace;
+  background: rgb(255, 220, 220);
+  color:rgb(48, 35, 35);
+  border-radius: 4px;
+  padding: 2px 5px;
+  font-weight: bold;
+  position: relative;
+}
+
+code::after {
+  content: " ";
+  background: white;
+  padding-right: 0.3em;
+  padding-top: 1em;
+  position: absolute;
+  right: -0.3em;
 }
 
 label {
@@ -255,6 +309,23 @@ a:hover {
 .icon-btn.delete::after {
   color: red;
   content: "delete";
+}
+
+.icon-btn.help::after {
+  content: "help_outline"
+}
+
+.help {
+  position: absolute;
+  bottom: 6px;
+  right: 20px;
+  font-size: 3em;
+  z-index: 30;
+  opacity: 0.2;
+}
+
+.help:hover {
+  opacity: 0.5;
 }
 
 .large {
