@@ -55,8 +55,8 @@ const addImage = () => {
   const image = prompt("Enter the url for the image");
 
   if (image) {
-    imageIndex = imageList.indexOf(image);
     addImages([image]);
+    imageIndex = imageList.indexOf(image);
     loadMedia(image);
   }
 };
@@ -231,6 +231,8 @@ const handleKeyUp = e => {
 }
 
 const handleShortcuts = e => {
+  if (modalIsVisible()) return;
+
   if (e.ctrlKey) {
     switch(e.key) {
       case "1":
@@ -269,7 +271,7 @@ const handleShortcuts = e => {
         prevImage()
         break;
       case "`":
-        overlay.style.display = "none";
+        overlay.style["pointer-events"] = "none";
         break;
     }
   }
@@ -351,6 +353,8 @@ const loadMedia = src => {
 
 const mod = (n, m) => ((n % m) + m) % m;
 
+const modalIsVisible = () => !modal.classList.contains("hidden");
+
 const nextImage = (dir) => {
   dir ||= 1;
 
@@ -423,13 +427,10 @@ const selectAlbum = e => {
 
   if (album) {
     localStorage.setItem("selected", album);
-    albumTitle.innerText = album;
+    albumTitle.innerText = album.replace("_", " ");
     updateImageList();
 
-    if (imageList.length > 0) {
-      imageIndex ||= 0;
-      loadMedia(imageList[imageIndex]);
-    }
+    loadMedia(imageList[imageIndex]);
   }
 };
 
@@ -439,7 +440,7 @@ const setAlbums = albums => {
 
 const unhideOverlay = () => {
   setTimeout(() => {
-    overlay.style.display = "block";
+    overlay.style["pointer-events"] = "all";
     overlay.focus();
   }, 1);
 };
@@ -466,7 +467,7 @@ const updateImageDisplay = () => {
   minScale = null;
   getImageDimensions();
   resizeImage();
-  albumTitle.innerText = album;
+  albumTitle.innerText = album.replace("_", " ");
   imageIndexElt.innerText = `${imageIndex + 1}/${imageList.length}`;
   // overlay.style.background = `url(${image.src}) 50%/ cover`;
 };

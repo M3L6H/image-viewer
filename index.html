@@ -28,11 +28,13 @@
       <h3 class="title">Manage Albums</h3>
       <form id="details">
         <label for="albums">Albums</label>
-        <div>
-          <select name="albums" id="albums">
-            <option selected disabled value="0">Select One</option>
-          </select>
-          <button onclick="createAlbum()">+</button>
+        <div class="vertical-center">
+          <div class="select">
+            <select name="albums" id="albums">
+              <option selected disabled value="0">Select One</option>
+            </select>
+          </div>
+          <span class="add large icon-btn" onclick="createAlbum()"></span>
         </div>
         <label for="images">Images</label>
         <textarea name="images" id="images" rows="10" disabled></textarea>
