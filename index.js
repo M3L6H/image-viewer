@@ -512,7 +512,7 @@ const loadMedia = src => {
   newMedia.id = "image";
   newMedia.src = src;
 
-  // Show the laoder
+  // Show the loader
   loader.classList.remove("hidden");
 };
 
