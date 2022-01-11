@@ -368,6 +368,12 @@ const handleShortcuts = e => {
         e.stopPropagation();
         clearData();
         break;
+      // Delete image if CTRL+D is pressed
+      case "d":
+        e.preventDefault();
+        e.stopPropagation();
+        if (imageList[imageIndex]) deleteImage(imageList[imageIndex]);
+        break;
       // Open the modal if CTRL+M is pressed
       case "m":
         e.preventDefault();

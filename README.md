@@ -22,6 +22,8 @@ with the video window.
 
 With an album selected, use `shift+a` to quick add an image or video.
 
+Use `ctrl+d` to delete the image you are currently viewing.
+
 Press `/` to toggle in-viewer help instructions.
 
 # Credits
