@@ -6,18 +6,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>IS Viewer</title>
 
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Icons&family=Roboto+Condensed:wght@300&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
   <script src="index.js"></script>
 </head>
 <body onload="init()">
   <img class="hidden" src="loader.svg" alt="loader" id="loader">
   <div id="viewer">
-    <img
-      id="image"
-      alt="image"
-    >
+    <img id="image">
   </div>
-  <div id="overlay" tabindex="-1"></div>
+  <div id="overlay" tabindex="-1">
+    <h1 id="album-title"></h1>
+    <span id="image-index"></span>
+  </div>
   <div id="modal-overlay" class="hidden" onclick="hideModal()">
   </div>
   <div id="modal" class="hidden">

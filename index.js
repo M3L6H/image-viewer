@@ -1,6 +1,8 @@
 let albums = "albums";
+let albumTitle = "album-title";
 let detailsForm = "details";
 let image = "image";
+let imageIndexElt = "image-index";
 let imageListElt = "image-list";
 let images = "images";
 let loader = "loader";
@@ -65,6 +67,8 @@ const addImages = (imageLinks) => {
   saveAlbum();
   updateImageList();
   images.value = "";
+
+  if (imageList.length === 1) loadMedia(imageList[imageIndex || 0]);
 };
 
 const clamp = (val, min, max) => {
@@ -96,16 +100,23 @@ const createListElement = (text, button) => {
   const li = document.createElement("li");
 
   if (button) {
-    const buttonElt = document.createElement("button");
+    const buttonElt = document.createElement("span");
+    buttonElt.classList.add("icon-btn");
     buttonElt.classList.add("right-margin");
-    buttonElt.innerText = "x";
+    buttonElt.classList.add("delete");
     buttonElt.addEventListener("click", () => deleteImage(text));
     li.appendChild(buttonElt);
-  }
 
-  const span = document.createElement("span");
-  span.innerText = text;
-  li.appendChild(span);
+    const link = document.createElement("a");
+    link.innerText = text;
+    link.href = text;
+    link.target = "_blank";
+    li.appendChild(link);
+  } else {
+    const span = document.createElement("span");
+    span.innerText = text;
+    li.appendChild(span);
+  }
 
   return li;
 };
@@ -170,8 +181,10 @@ const getAlbums = () => {
 
 const getElements = () => {
   albums = document.getElementById(albums);
+  albumTitle = document.getElementById(albumTitle);
   detailsForm = document.getElementById(detailsForm);
   image = document.getElementById(image);
+  imageIndexElt = document.getElementById(imageIndexElt);
   imageListElt = document.getElementById(imageListElt);
   images = document.getElementById(images);
   loader = document.getElementById(loader);
@@ -271,29 +284,31 @@ const hideModal = () => {
   modalOverlay.classList.add("hidden");
 };
 
-const imageLoaded = (newImage) => {
-  loader.classList.add("hidden");
-  image.replaceWith(newImage);
-  image = newImage;
-  minScale = null;
-  getImageDimensions();
-  resizeImage();
-};
-
 const iframeLoaded = (iframe) => {
   loader.classList.add("hidden");
   iframe.onload = undefined;
   iframe.style.visibility = "visible";
-  minScale = null;
-  getImageDimensions();
-  resizeImage();
+  updateImageDisplay();
 }
+
+const imageLoaded = (newImage) => {
+  loader.classList.add("hidden");
+  image.replaceWith(newImage);
+  image = newImage;
+  updateImageDisplay();
+};
 
 const loadMedia = src => {
   let newMedia;
 
   if (!src) {
-    image.src = null;
+    const message = document.createElement("div");
+    message.innerText = "No images";
+    message.classList.add("big");
+    message.classList.add("center");
+    image.replaceWith(message);
+    image = message;
+    imageIndexElt.innerText = "";
     return;
   }
 
@@ -408,6 +423,7 @@ const selectAlbum = e => {
 
   if (album) {
     localStorage.setItem("selected", album);
+    albumTitle.innerText = album;
     updateImageList();
 
     if (imageList.length > 0) {
@@ -446,6 +462,15 @@ const updateAlbumsDropdown = (selected) => {
   });
 };
 
+const updateImageDisplay = () => {
+  minScale = null;
+  getImageDimensions();
+  resizeImage();
+  albumTitle.innerText = album;
+  imageIndexElt.innerText = `${imageIndex + 1}/${imageList.length}`;
+  // overlay.style.background = `url(${image.src}) 50%/ cover`;
+};
+
 const updateImageList = () => {
   imageListElt.textContent = "";
 
@@ -456,8 +481,6 @@ const updateImageList = () => {
       imageListElt.appendChild(createListElement(url, true));
     });
   }
-
-  loadMedia(imageList[imageIndex || 0]);
 };
 
 const windowResized = () => {
